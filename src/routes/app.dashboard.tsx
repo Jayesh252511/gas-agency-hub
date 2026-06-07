@@ -476,7 +476,7 @@ function Kpi({ label, value, icon, accent, description, tooltip }: { label: stri
 
 function QuickAction({ to, icon, label }: { to: string; icon: React.ReactNode; label: string }) {
   return (
-    <Button asChild variant="outline" className="h-24 flex-col gap-2 shadow-soft hover:bg-primary-soft/10 hover:border-primary/40 hover:text-primary transition-all border group">
+    <Button asChild variant="outline" className="h-24 flex-col gap-2 shadow-soft hover:bg-primary-soft/10 hover:border-primary/40 hover:text-primary hover-spring border group">
       <Link to={to}>
         <div className="h-10 w-10 rounded-xl bg-muted group-hover:bg-primary-soft flex items-center justify-center group-hover:text-primary transition-colors">
           {icon}

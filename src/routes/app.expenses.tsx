@@ -337,7 +337,17 @@ function Page() {
       {/* Expenses Table */}
       <Card className="shadow-soft overflow-hidden"><CardContent className="p-0">
         {loading ? (
-          <div className="p-12 text-center text-xs text-muted-foreground animate-pulse">Loading overhead expenses...</div>
+          <div className="p-5 space-y-4 animate-pulse">
+            {[1, 2, 3].map((n) => (
+              <div key={n} className="flex justify-between items-center py-2 border-b last:border-0 border-border/40">
+                <div className="space-y-2 flex-1">
+                  <div className="h-4 bg-muted rounded w-1/3"></div>
+                  <div className="h-3 bg-muted rounded w-1/4"></div>
+                </div>
+                <div className="h-6 bg-muted rounded w-16"></div>
+              </div>
+            ))}
+          </div>
         ) : filtered.length === 0 ? (
           <EmptyState title={t("common.noData")} />
         ) : (

@@ -127,7 +127,7 @@ function AppLayout() {
           {navItems.map((n) => (
             <Link
               key={n.to} to={n.to}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-sidebar-foreground hover:bg-sidebar-accent transition-colors"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-sidebar-foreground hover:bg-sidebar-accent transition-all duration-200 active:scale-[0.98] hover:translate-x-[2px]"
               activeProps={{ className: "bg-sidebar-accent text-sidebar-primary" }}
               activeOptions={{ exact: (n as any).exact }}
             >
@@ -143,13 +143,15 @@ function AppLayout() {
             </div>
             <button 
               onClick={toggleTheme} 
-              className="text-muted-foreground hover:text-foreground p-1.5 rounded-lg hover:bg-sidebar-accent transition-colors"
+              className="text-muted-foreground hover:text-foreground p-1.5 rounded-lg hover:bg-sidebar-accent transition-all duration-300 active:scale-90"
               title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
             >
-              {theme === "dark" ? <Sun className="w-4 h-4 text-amber-500 animate-spin-slow" /> : <Moon className="w-4 h-4" />}
+              <div className={cn("transition-transform duration-500", theme === "dark" ? "rotate-[360deg] scale-110" : "rotate-0")}>
+                {theme === "dark" ? <Sun className="w-4 h-4 text-amber-500" /> : <Moon className="w-4 h-4" />}
+              </div>
             </button>
           </div>
-          <Button variant="ghost" className="w-full justify-start text-sidebar-foreground hover:bg-sidebar-accent" onClick={signOut}>
+          <Button variant="ghost" className="w-full justify-start text-sidebar-foreground hover:bg-sidebar-accent hover-spring" onClick={signOut}>
             <LogOut className="w-4 h-4 mr-2" /> Sign Out
           </Button>
         </div>
@@ -177,12 +179,14 @@ function AppLayout() {
           <div className="flex items-center gap-1">
             <button 
               onClick={toggleTheme} 
-              className="p-2 text-muted-foreground hover:text-foreground"
+              className="p-2 text-muted-foreground hover:text-foreground transition-all duration-300 active:scale-90"
               title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
             >
-              {theme === "dark" ? <Sun className="w-5 h-5 text-amber-500" /> : <Moon className="w-5 h-5" />}
+              <div className={cn("transition-transform duration-500", theme === "dark" ? "rotate-[360deg] scale-110" : "rotate-0")}>
+                {theme === "dark" ? <Sun className="w-5 h-5 text-amber-500" /> : <Moon className="w-5 h-5" />}
+              </div>
             </button>
-            <button onClick={signOut} className="p-2 -mr-2 text-muted-foreground hover:text-foreground"><LogOut className="w-5 h-5" /></button>
+            <button onClick={signOut} className="p-2 -mr-2 text-muted-foreground hover:text-foreground transition-all duration-200 active:scale-95"><LogOut className="w-5 h-5" /></button>
           </div>
         </header>
 
