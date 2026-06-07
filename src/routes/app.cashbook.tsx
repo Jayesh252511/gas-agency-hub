@@ -1065,7 +1065,7 @@ function Page() {
 
   /* ──────────────────────────────────────────────────────────── JSX ─── */
   return (
-    <div className="space-y-6 pb-10">
+    <div className="space-y-6 pb-10 animate-page-in">
       <PageHeader title="Daily Cash Book" actions={
         <div className="flex items-center gap-2">
           <DropdownMenu>
