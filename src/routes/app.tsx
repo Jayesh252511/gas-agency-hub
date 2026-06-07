@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet, redirect, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect, Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -44,6 +44,8 @@ function AppLayout() {
   const { roles } = useAuth();
   const [open, setOpen] = useState(false);
   const nav = useNavigate();
+  const routerState = useRouterState();
+  const pathname = routerState.location.pathname;
 
   // Dark mode theme state
   const [theme, setTheme] = useState<"light" | "dark">("light");
@@ -190,46 +192,46 @@ function AppLayout() {
           </div>
         </header>
 
-        {/* Mobile drawer */}
-        {open && (
-          <div className="lg:hidden fixed inset-0 z-40" onClick={() => setOpen(false)}>
-            <div className="absolute inset-0 bg-black/40" />
-            <aside className="absolute left-0 top-0 bottom-0 w-72 bg-sidebar shadow-xl p-3 overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-              <div className="mb-4 px-2 py-3 border-b border-sidebar-border flex items-center gap-2.5">
-                {me?.agency?.logo_url ? (
-                  <img 
-                    src={me.agency.logo_url} 
-                    className="w-9 h-9 rounded-lg object-cover border border-sidebar-border shadow-sm" 
-                    alt="Agency Logo" 
-                  />
-                ) : (
-                  <div className="w-9 h-9 rounded-lg bg-primary text-primary-foreground grid place-items-center shadow-sm">
-                    <Flame className="w-5 h-5" />
-                  </div>
-                )}
-                <div className="leading-tight min-w-0">
-                  <div className="font-bold text-sm truncate">{me?.agency?.name}</div>
-                  <div className="text-xs text-muted-foreground">{me?.agency?.code}</div>
+        {/* Mobile drawer with slide transition */}
+        <div className={cn("lg:hidden fixed inset-0 z-40 transition-opacity duration-300", open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none")} onClick={() => setOpen(false)}>
+          <div className="absolute inset-0 bg-black/40" />
+          <aside className={cn("absolute left-0 top-0 bottom-0 w-72 bg-sidebar shadow-xl p-3 overflow-y-auto transition-transform duration-300 ease-out", open ? "translate-x-0" : "-translate-x-full")} onClick={(e) => e.stopPropagation()}>
+            <div className="mb-4 px-2 py-3 border-b border-sidebar-border flex items-center gap-2.5">
+              {me?.agency?.logo_url ? (
+                <img 
+                  src={me.agency.logo_url} 
+                  className="w-9 h-9 rounded-lg object-cover border border-sidebar-border shadow-sm" 
+                  alt="Agency Logo" 
+                />
+              ) : (
+                <div className="w-9 h-9 rounded-lg bg-primary text-primary-foreground grid place-items-center shadow-sm">
+                  <Flame className="w-5 h-5" />
                 </div>
+              )}
+              <div className="leading-tight min-w-0">
+                <div className="font-bold text-sm truncate">{me?.agency?.name}</div>
+                <div className="text-xs text-muted-foreground">{me?.agency?.code}</div>
               </div>
-              <div className="space-y-1">
-                {navItems.map((n) => (
-                  <Link key={n.to} to={n.to} onClick={() => setOpen(false)}
-                    className="flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium text-sidebar-foreground hover:bg-sidebar-accent"
-                    activeProps={{ className: "bg-sidebar-accent text-sidebar-primary" }}
-                    activeOptions={{ exact: (n as any).exact }}
-                  >
-                    <n.icon className="w-5 h-5" />{n.label}
-                  </Link>
-                ))}
-              </div>
-            </aside>
-          </div>
-        )}
+            </div>
+            <div className="space-y-1">
+              {navItems.map((n) => (
+                <Link key={n.to} to={n.to} onClick={() => setOpen(false)}
+                  className="flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium text-sidebar-foreground hover:bg-sidebar-accent transition-colors"
+                  activeProps={{ className: "bg-sidebar-accent text-sidebar-primary" }}
+                  activeOptions={{ exact: (n as any).exact }}
+                >
+                  <n.icon className="w-5 h-5" />{n.label}
+                </Link>
+              ))}
+            </div>
+          </aside>
+        </div>
 
-        {/* Main Content Pane */}
-        <main className={cn("flex-1 p-4 pb-24 lg:p-8 max-w-7xl w-full mx-auto")}>
-          <Outlet />
+        {/* Main Content Pane with Key-based Page-In Transition */}
+        <main className="flex-1 p-4 pb-24 lg:p-8 max-w-7xl w-full mx-auto">
+          <div key={pathname} className="animate-page-in">
+            <Outlet />
+          </div>
         </main>
 
         {/* Mobile Bottom Navigation Bar (Sticky) */}
